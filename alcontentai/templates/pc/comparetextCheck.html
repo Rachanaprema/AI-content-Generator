@@ -1,0 +1,209 @@
+{% extends "pc/sideNavbar.html" %} {# Ensure this path is correct for your sidebar base template #}
+{% load static %}
+
+{% block title %}AI Content Helper | Text Comparison{% endblock %} {# Set page title #}
+
+{% block content %}
+<style>
+    /* Specific styles for this page, overriding or complementing sideNavbar.html's styles */
+    .content-area-wrapper {
+        min-height: calc(100vh - var(--navbar-height, 60px) - var(--footer-height, 60px) - 40px); /* Adjust as per your actual navbar/footer heights */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Pushes results down if content is short */
+        padding: 20px; /* Add some padding around the main content */
+    }
+
+    /* Keep existing styles */
+    body {
+        background: linear-gradient(to right, #000428, #004e92);
+        font-family: 'Segoe UI', sans-serif;
+        color: #e0e0e0;
+        /* Remove min-height: 100vh here as base template handles body structure */
+    }
+
+    .form-container {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        /* Ensure it doesn't overflow horizontally */
+        max-width: 100%; /* Important for small screens */
+    }
+
+    .form-label {
+        color: #a6d1ff;
+        font-weight: 600;
+    }
+
+    .form-control {
+        background-color: #0c1b33;
+        border: 1px solid #3c5a99;
+        color: #ffffff;
+        resize: vertical; /* Allow vertical resizing of textareas */
+    }
+
+    .form-control::placeholder {
+        color: #bbbbbb;
+    }
+
+    .similarity-score {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #00e5ff;
+    }
+
+    .badge-remark {
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        border-radius: 30px;
+        background-color: #212529;
+        border: 1px solid #00e5ff;
+        color: #00e5ff;
+    }
+
+    .feedback {
+        font-size: 1rem;
+        color: #c0dfff;
+    }
+
+    .btn-custom {
+        background-color: #0dcaf0;
+        color: #001f3f;
+        font-weight: 600;
+        border-radius: 30px;
+        transition: all 0.3s ease; /* Smooth transition for hover effects */
+    }
+
+    .btn-custom:hover {
+        background-color: #00b4d8;
+        color: #fff;
+        transform: translateY(-2px); /* Slight lift effect */
+    }
+
+    .section-title {
+        color: #ffffff;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .description {
+        color: #b0d0ff;
+    }
+
+    /* NEW: Styling for results section to enable scrolling if content is long */
+    .results-scroll-container {
+        max-height: 40vh; /* Adjust max height based on layout. 40vh is an example. */
+        overflow-y: auto; /* Enable vertical scroll */
+        padding-right: 15px; /* Prevent scrollbar from overlapping content */
+        scrollbar-width: thin; /* Firefox */
+        scrollbar-color: #00e5ff #0c1b33; /* Thumb and track color */
+        margin-top: 20px; /* Space from the form */
+    }
+
+    /* Custom scrollbar for Webkit browsers */
+    .results-scroll-container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .results-scroll-container::-webkit-scrollbar-track {
+        background: #0c1b33;
+        border-radius: 10px;
+    }
+
+    .results-scroll-container::-webkit-scrollbar-thumb {
+        background-color: #00e5ff;
+        border-radius: 10px;
+        border: 2px solid #0c1b33;
+    }
+
+    /* Media query for smaller screens, if needed for specific adjustments */
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 15px;
+        }
+        .similarity-score {
+            font-size: 2.5rem;
+        }
+        .badge-remark {
+            font-size: 1rem;
+            padding: 8px 15px;
+        }
+    }
+</style>
+
+<div class="content-area-wrapper"> {# This div ensures full height management within the content block #}
+    <div class="container py-3"> {# Reduced padding to maximize vertical space #}
+        <div class="text-center mb-4"> {# Reduced margin-bottom #}
+            <h1 class="fw-bold section-title">AI Content Helper</h1>
+            <p class="description">🔥 Compare two texts and instantly detect how similar they are using AI.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <div class="form-container">
+                    <form method="POST" action="{% url 'twofiletest1' %}">
+                        {% csrf_token %}
+                        <div class="mb-3"> {# Reduced margin-bottom #}
+                            <label for="text1" class="form-label">📝 Text 1</label>
+                            <textarea name="text1" id="text1" rows="6" class="form-control" placeholder="Paste or write first content..." required>{{ request.POST.text1 }}</textarea>
+                        </div>
+
+                        <div class="mb-4"> {# Keep larger margin before button #}
+                            <label for="text2" class="form-label">📝 Text 2</label>
+                            <textarea name="text2" id="text2" rows="6" class="form-control" placeholder="Paste or write second content..." required>{{ request.POST.text2 }}</textarea>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-custom px-5 py-2">
+                                <i class="fas fa-bolt"></i> Compare Texts
+                            </button>
+                        </div>
+                    </form>
+
+                    {% if result %}
+                    {# Wrap results in a scrollable container #}
+                    <div class="results-scroll-container">
+                        <div class="text-center mt-4"> {# Adjusted margin-top #}
+                            <h4 class="text-info">Similarity Score</h4>
+                            <div class="similarity-score">{{ result }}%</div>
+
+                            <div class="mt-3 badge-remark">
+                                {% if result > 85 %}
+                                    <i class="fas fa-fire"></i> Highly Similar
+                                {% elif result > 60 %}
+                                    <i class="fas fa-copy"></i> Moderately Similar
+                                {% elif result > 40 %}
+                                    <i class="fas fa-align-left"></i> Slightly Similar
+                                {% else %}
+                                    <i class="fas fa-circle-xmark"></i> Different
+                                {% endif %}
+                            </div>
+
+                            <p class="feedback mt-3">
+                                {% if result > 85 %}
+                                    These texts are nearly identical. Possible duplicate or minor edits only.
+                                {% elif result > 60 %}
+                                    Moderate similarity — likely paraphrased or shared ideas.
+                                {% elif result > 40 %}
+                                    Partial overlap or common topics detected.
+                                {% else %}
+                                    No significant similarity. These are different in context or structure.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div> {# End results-scroll-container #}
+                    {% endif %}
+
+                    {% if error %}
+                    <div class="alert alert-danger text-center mt-4">
+                        <i class="fas fa-exclamation-triangle"></i> {{ error }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div> {# End content-area-wrapper #}
+{% endblock content %}

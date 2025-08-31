@@ -1,0 +1,17 @@
+<div class="tool-section">
+  <h3>Get Essential Summary from Your Text</h3>
+  <form method="post">
+    {% csrf_token %}
+    <textarea name="input_text" rows="10" cols="70" placeholder="Paste your text here..." style="width: 100%; padding: 10px; border-radius: 10px;"></textarea><br><br>
+    <button type="submit">Summarize</button>
+  </form>
+
+  {% if summary %}
+    <div class="result-section">
+      <h4>Essential Summary:</h4>
+      <div class="output-box">
+        {{ summary }}
+      </div>
+    </div>
+  {% endif %}
+</div>

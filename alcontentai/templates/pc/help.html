@@ -1,0 +1,199 @@
+{% extends "pc/sideNavbar.html" %}
+{% load static %}
+
+{% block title %}AI Content Helper | About & Get Involved{% endblock %}
+
+{% block content %}
+<style>
+    /* Styles specific to this page, complementing or overriding global styles */
+
+    /* Adjust main-content padding if needed for sidebar layout */
+    .main-content {
+        padding-top: 30px; /* More space from the top, assuming sidebar doesn't cover top */
+        padding-bottom: 50px; /* Space for footer */
+        min-height: calc(100vh - var(--navbar-height, 60px) - var(--footer-height, 60px)); /* Adjust as per your actual base template's header/footer heights */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .new-section {
+        padding: 40px 0;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.05); /* Soft transparent background */
+        backdrop-filter: blur(8px); /* Subtle blur effect */
+        border-radius: 15px;
+        margin-bottom: 40px; /* Space between sections */
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .new-section h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 30px;
+        color: #00bcd4; /* Cyan color for headings */
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .new-section p {
+        font-size: 1.1rem;
+        color: #ccc;
+        max-width: 900px; /* Max width for paragraphs */
+        margin: 0 auto 20px auto;
+        line-height: 1.6;
+    }
+
+    /* Info cards for 'Understanding AI Content Generation' */
+    .info-card {
+        background-color: #1a1a1a;
+        border: none;
+        border-radius: 12px;
+        color: #fff;
+        padding: 30px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%; /* Ensure cards in a row have equal height */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .info-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 24px rgba(0, 255, 255, 0.2);
+    }
+
+    .card-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        color: #ffc107; /* Warning color for icons */
+    }
+
+    .info-card .card-title {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #00bcd4; /* Cyan for card titles */
+    }
+
+    .info-card .card-text {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #eee;
+        flex-grow: 1; /* Allow text to take available space */
+    }
+
+    .info-card ul {
+        text-align: left; /* Align list items left within the card */
+        margin-top: 15px;
+        margin-bottom: 0; /* Remove default bottom margin */
+        list-style: disc; /* Use regular disc bullets */
+        padding-left: 20px; /* Indent the list */
+    }
+
+    .info-card ul li {
+        font-size: 0.9em;
+        color: #ddd;
+        margin-bottom: 5px;
+        position: static; /* Override any global list-item styles that might add icons */
+        padding-left: 0;
+    }
+
+    /* Remove checkmark from card lists if present globally */
+    .info-card ul li::before {
+        content: normal;
+    }
+
+    /* Optional: Style for the horizontal rule between sections */
+    hr {
+        border-top: 2px solid rgba(0, 188, 212, 0.3); /* A subtle cyan line */
+        width: 60%;
+        margin: 60px auto;
+    }
+
+    /* Ensure content fits within the screen on smaller devices */
+    @media (max-width: 768px) {
+        .new-section h2 {
+            font-size: 2rem;
+        }
+        .new-section p {
+            font-size: 1rem;
+        }
+        .info-card {
+            padding: 20px;
+        }
+        .card-icon {
+            font-size: 2.5rem;
+        }
+        .info-card .card-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="main-content">
+    <div class="container">
+        <div class="new-section">
+            <h2>About AI Content Helper</h2>
+            <p>
+                Welcome to **AI Content Helper**, your all-in-one suite for leveraging artificial intelligence in content creation and analysis.
+                We empower individuals and businesses to generate high-quality content faster, compare documents efficiently,
+                and extract valuable insights from various data sources.
+            </p>
+            <p>
+                Our mission is to make advanced AI tools **accessible and easy to use**,
+                transforming the way you interact with text, images, and information.
+            </p>
+        </div>
+
+        <hr> <section class="py-5">
+            <h2 class="text-center mb-5" style="color: #00bcd4;">Understanding AI Content Generation</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card info-card text-center">
+                        <div class="card-body">
+                            <div class="card-icon"><i class="fas fa-microchip"></i></div>
+                            <h5 class="card-title">What is it?</h5>
+                            <p class="card-text">
+                                **AI content generation** uses artificial intelligence models, primarily Large Language Models (LLMs), to produce various forms of content. This includes text, articles, summaries, code, images, and audio. These models learn from vast datasets to understand patterns, grammar, and context, allowing them to generate coherent and relevant output.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card info-card text-center">
+                        <div class="card-body">
+                            <div class="card-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <h5 class="card-title">Key Benefits</h5>
+                            <p class="card-text">
+                                AI content generation offers numerous advantages for individuals and businesses:
+                                <ul>
+                                    <li>**Increased Efficiency:** Generate content significantly faster than manual methods.</li>
+                                    <li>**Scalability:** Produce large volumes of content without a proportional increase in resources.</li>
+                                    <li>**Cost-Effectiveness:** Reduce expenditure on content creation.</li>
+                                    <li>**Consistency:** Maintain a consistent brand voice and style across all content.</li>
+                                    <li>**SEO Optimization:** Generate content optimized for search engines.</li>
+                                    <li>**Idea Generation:** Overcome writer's block and explore new content angles.</li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card info-card text-center">
+                        <div class="card-body">
+                            <div class="card-icon"><i class="fas fa-robot"></i></div>
+                            <h5 class="card-title">How it Works</h5>
+                            <p class="card-text">
+                                At its core, AI content generation relies on **Natural Language Processing (NLP)** and **deep learning techniques**.
+                                <br><br>
+                                AI models are trained on enormous amounts of text data (books, articles, websites). They learn patterns, grammar, semantics, and context. When you provide a "prompt" or instruction, the AI uses its learned knowledge to predict and generate a sequence of words that are coherent, relevant, and follow the desired style, effectively "writing" new content.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

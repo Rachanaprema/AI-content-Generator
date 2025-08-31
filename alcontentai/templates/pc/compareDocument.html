@@ -1,0 +1,30 @@
+{% extends "pc/sideNavbar.html" %}
+{% block content %}
+{% load static %}
+<div class="tool-section">
+  <h3>Compare Two Documents</h3>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Upload Document 1:</label>
+    <input type="file" name="doc1" accept=".txt,.doc,.docx,.pdf" required><br><br>
+
+    <label>Upload Document 2:</label>
+    <input type="file" name="doc2" accept=".txt,.doc,.docx,.pdf" required><br><br>
+
+    <button type="submit">Compare</button>
+  </form>
+
+  {% if similarity_score %}
+    <div class="result-section">
+      <h4>Similarity Score:</h4>
+      <div class="output-box">{{ similarity_score }}%</div>
+
+      {% if differences %}
+        <h4>Differences:</h4>
+        <div class="output-box" style="background-color: #ffe6e6;">{{ differences }}</div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+</div>
+  {% endblock %}
